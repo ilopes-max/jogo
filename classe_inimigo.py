@@ -9,6 +9,7 @@ class Inimigo:
     #criando um atributo
         self.pos_y_inimigo = random.randint(0,500)
         self.velocidade = random.randint(1,20)
+        self.mascara = pg.mask.from_surface(self.carro)
 
 
     def andar(self):
@@ -23,7 +24,8 @@ class Inimigo:
 
     def voltar(self):
         self. pos_x_carro = -100
-        self.pos_y_inimigo = random.randint(0,500)
+        self.pos_y_inimigo = random.randint(0,400)
         self.velocidade = random.randint(1,20)
+    
 
 

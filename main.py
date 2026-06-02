@@ -1,6 +1,7 @@
 #importando o pygame e dando um nome 
 import pygame as pg
 from classe_inimigo import Inimigo
+from classe_jogador import Jogador
 
 
 pg.init() #inicializa os módulos do pygame, a maioria iria funcionar sem, mas alguns necessitam inicializar
@@ -11,29 +12,34 @@ clock = pg.time.Clock()
 tela = pg.display.set_mode((1000,500))
 
 #configurando a tela
-pg.display.set_caption ("Jogo da Isa")
+pg.display.set_caption ("JOGO DA POCOYOYA")
 
 #carrengo imagens 
 estrada = pg.image.load("scr/img/estrada.png")
-hamster = pg.image.load("scr/img/bicho1.png")
+hamster = pg.image.load("scr/img/pocoya1.png")
+capa_inicio = pg.image.load("scr/img/bemvindo.png")
 
 
 
 #diminuindo o tamanho da imagem
 estrada = pg.transform.scale(estrada, (1000,500))
-hamster = pg.transform.scale(hamster, (60,60))
+capa_inicio = pg.transform.scale(capa_inicio, (1000,500))
+
 
 #criando um inimigo
-lista_inimigo = [Inimigo("scr/img/carro2.png"),
-                 Inimigo("scr/img/carro3.png"),
+lista_inimigo = [Inimigo("scr/img/carro1.png"),
                  Inimigo("scr/img/carro2.png"),
-                 Inimigo('scr/img/carro3.png'),
-                 Inimigo('scr/img/carro2.png'),
-                 Inimigo('scr/img/carro3.png')]
+                 Inimigo("scr/img/carro3.png"),
+                 Inimigo("scr/img/carro4.png"),
+                 Inimigo('scr/img/carro5.png'),
+                 Inimigo("scr/img/carro6.png"),
+                 Inimigo('scr/img/carro7.png'),
+                 Inimigo('scr/img/carro8.png'),
+                 Inimigo("scr/img/carro9.png"),
+                 Inimigo("scr/img/carro10.png")]
 
-#criando uma variavel que vai definir a posição do hamster
-pos_x_hamster=0
-pos_y_hamster=0
+hamster = Jogador()
+status_jogo = "INICIO"
 
 
 #vou criar um loop infinito para manter a janela aberta
@@ -44,46 +50,27 @@ while True:
             pg.quit() #encerro o jogo
 #pegando a lista de teclas pressionadas
     teclas_pressionadas = pg.key.get_pressed()
-
-    #verifico se a tecla da direita está pressionada 
-    if teclas_pressionadas[pg.K_RIGHT]:
-        pos_x_hamster = pos_x_hamster +5
-    if teclas_pressionadas[pg.K_LEFT]:
-        pos_x_hamster = pos_x_hamster -5
-    if teclas_pressionadas [pg.K_UP]:
-        pos_y_hamster = pos_y_hamster -5                           
-    if teclas_pressionadas[pg.K_DOWN]:
-        pos_y_hamster = pos_y_hamster +5
+    if status_jogo == "INICIO":
+        tela.blit(capa_inicio,(0,0))
+        if teclas_pressionadas[pg.K_KP_ENTER] or teclas_pressionadas[pg.K_RETURN]:
+            status_jogo = "JOGANDO"
     
-# ===== LIMITES =====
+    if status_jogo == "JOGANDO":
+        tela.fill((255,255,255))
+        tela.blit(estrada, (0,0))
 
-#esquerda
-    if pos_x_hamster < 0:
-        pos_x_hamster = 0
+        hamster.exibir(tela)
+        hamster.andar(teclas_pressionadas)
+    #fazendo o inimigo andar
+        for inimigo in lista_inimigo:
+            inimigo.andar()
+            inimigo.exibir(tela)
+            if hamster.mascara.overlap(inimigo.mascara,(hamster.pos_x - inimigo.pos_x_carro, hamster.pos_y - inimigo.pos_y_inimigo)):
+                inimigo.voltar()
+                hamster.gritar()
+                hamster.voltar()
 
-#direita
-    if pos_x_hamster > 950 :
-        pos_x_hamster = 950 
-
-#cima
-    if pos_y_hamster< 0:
-        pos_y_hamster= 0
-
-#baixo
-    if pos_y_hamster > 450:
-        pos_y_hamster = 450
-#exibindo a imagem do hamster 
-    tela.blit(estrada, (0,0))
-    tela.blit(hamster,(pos_x_hamster,pos_y_hamster))
-#fazendo o inimigo andar
-    for inimigo in lista_inimigo:
-        inimigo.andar()
-        inimigo.exibir(tela)
-    
-    
-
-
-
+  
 #atualizando a tela
     pg.display.update()
     #controlar o FPS (frames por segundo)
