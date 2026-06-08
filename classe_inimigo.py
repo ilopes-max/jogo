@@ -7,8 +7,8 @@ class Inimigo:
         self.carro = pg.transform.scale(self.carro, (80,80))
         self.pos_x_carro = -10
     #criando um atributo
-        self.pos_y_inimigo = random.randint(0,500)
-        self.velocidade = random.randint(1,20)
+        self.pos_y_inimigo = random.randint(0,400)
+        self.velocidade = random.randint(1,10)
         self.mascara = pg.mask.from_surface(self.carro)
 
 

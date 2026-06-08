@@ -18,28 +18,34 @@ pg.display.set_caption ("JOGO DA POCOYOYA")
 estrada = pg.image.load("scr/img/estrada.png")
 hamster = pg.image.load("scr/img/pocoya1.png")
 capa_inicio = pg.image.load("scr/img/bemvindo.png")
+capa_perdeu = pg.image.load("scr/img/voceperdeu.png")
+capa_ganhar = pg.image.load("scr/img/voceganhou.png")
 
 
 
 #diminuindo o tamanho da imagem
 estrada = pg.transform.scale(estrada, (1000,500))
 capa_inicio = pg.transform.scale(capa_inicio, (1000,500))
+capa_perdeu = pg.transform.scale (capa_perdeu,(1000,500))
+capa_ganhar = pg.transform.scale (capa_ganhar, (1000,500))
 
 
 #criando um inimigo
 lista_inimigo = [Inimigo("scr/img/carro1.png"),
                  Inimigo("scr/img/carro2.png"),
-                 Inimigo("scr/img/carro3.png"),
-                 Inimigo("scr/img/carro4.png"),
-                 Inimigo('scr/img/carro5.png'),
-                 Inimigo("scr/img/carro6.png"),
-                 Inimigo('scr/img/carro7.png'),
-                 Inimigo('scr/img/carro8.png'),
-                 Inimigo("scr/img/carro9.png"),
-                 Inimigo("scr/img/carro10.png")]
+                Inimigo("scr/img/carro3.png"),
+                Inimigo("scr/img/carro4.png")
+                ]
+
+fonte = pg.font.SysFont("Elephant", 16,True,False)
 
 hamster = Jogador()
 status_jogo = "INICIO"
+
+contador_morte = 0
+
+contador_pontos = 0 
+
 
 
 #vou criar um loop infinito para manter a janela aberta
@@ -58,6 +64,9 @@ while True:
     if status_jogo == "JOGANDO":
         tela.fill((255,255,255))
         tela.blit(estrada, (0,0))
+        #renderizando e inserindo o  texto
+        texto_pontuacao = fonte.render(f"Pontuação: {contador_pontos}", True,(255,255,255),None)
+        tela.blit(texto_pontuacao,(0,0))
 
         hamster.exibir(tela)
         hamster.andar(teclas_pressionadas)
@@ -65,10 +74,37 @@ while True:
         for inimigo in lista_inimigo:
             inimigo.andar()
             inimigo.exibir(tela)
-            if hamster.mascara.overlap(inimigo.mascara,(hamster.pos_x - inimigo.pos_x_carro, hamster.pos_y - inimigo.pos_y_inimigo)):
+            if hamster.mascara.overlap(inimigo.mascara,(inimigo.pos_x_carro - hamster.pos_x,  inimigo.pos_y_inimigo - hamster.pos_y)):
                 inimigo.voltar()
                 hamster.gritar()
                 hamster.voltar()
+                contador_morte += 1
+                if contador_morte ==3:
+                    status_jogo = "PERDEU"
+                    hamster.gritar()
+                    contador_morte = 0  
+                    contador_pontos = 0
+                
+            
+    if hamster.pos_x == 500:
+        contador_pontos = contador_pontos +1
+        hamster.voltar()
+        if contador_pontos ==3:
+         status_jogo = "GANHOU"
+         
+         if status_jogo =="GANHOU":
+            tela.blit(capa_ganhar,(0,0))
+            hamster.ganhou()
+    
+       
+
+    if status_jogo == "PERDEU":
+        tela.blit(capa_perdeu,(0,0))
+       
+        if teclas_pressionadas[pg.K_KP_ENTER] or teclas_pressionadas[pg.K_RETURN]:
+            status_jogo = "JOGANDO"
+    
+   
 
   
 #atualizando a tela
