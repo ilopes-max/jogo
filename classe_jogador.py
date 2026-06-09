@@ -1,18 +1,18 @@
 import pygame as pg
 import random
-
+from caminho_relativo import resource_path as rp 
 class Jogador:
     def __init__(self):
     
-        self.imagem = pg.image.load("scr/img/pocoya1.png")
+        self.imagem = pg.image.load(rp("scr/img/pocoya1.png"))
         self.imagem = hamster = pg.transform.scale(self.imagem, (90,90))
 
         self.pos_x = 0
         self.pos_y=0
         self.mascara = pg.mask.from_surface(self.imagem)
 
-        self.som = pg.mixer.Sound("scr/sound/som_perdeu.mp3")
-        self.som2 = pg.mixer.Sound("scr/sound/som_ganhou.mp3")
+        self.som = pg.mixer.Sound(rp("scr/sound/som_perdeu.mp3"))
+        self.som2 = pg.mixer.Sound(rp("scr/sound/som_ganhou.mp3"))
 
     def andar (self, teclas_pressionadas):
         if teclas_pressionadas[pg.K_RIGHT]:

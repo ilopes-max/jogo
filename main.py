@@ -2,6 +2,7 @@
 import pygame as pg
 from classe_inimigo import Inimigo
 from classe_jogador import Jogador
+from caminho_relativo import resource_path as rp 
 
 
 pg.init() #inicializa os módulos do pygame, a maioria iria funcionar sem, mas alguns necessitam inicializar
@@ -15,11 +16,11 @@ tela = pg.display.set_mode((1000,500))
 pg.display.set_caption ("JOGO DA POCOYOYA")
 
 #carrengo imagens 
-estrada = pg.image.load("scr/img/estrada.png")
-hamster = pg.image.load("scr/img/pocoya1.png")
-capa_inicio = pg.image.load("scr/img/bemvindo.png")
-capa_perdeu = pg.image.load("scr/img/voceperdeu.png")
-capa_ganhar = pg.image.load("scr/img/voceganhou.png")
+estrada = pg.image.load(rp("scr/img/estrada.png"))
+hamster = pg.image.load(rp("scr/img/pocoya1.png"))
+capa_inicio = pg.image.load(rp("scr/img/bemvindo.png"))
+capa_perdeu = pg.image.load(rp("scr/img/voceperdeu.png"))
+capa_ganhar = pg.image.load(rp("scr/img/voceganhou.png"))
 
 
 
@@ -31,10 +32,10 @@ capa_ganhar = pg.transform.scale (capa_ganhar, (1000,500))
 
 
 #criando um inimigo
-lista_inimigo = [Inimigo("scr/img/carro1.png"),
-                 Inimigo("scr/img/carro2.png"),
-                Inimigo("scr/img/carro3.png"),
-                Inimigo("scr/img/carro4.png")
+lista_inimigo = [Inimigo(rp("scr/img/carro1.png")),
+                 Inimigo(rp("scr/img/carro2.png")),
+                Inimigo(rp("scr/img/carro3.png")),
+                Inimigo(rp("scr/img/carro4.png"))
                 ]
 
 fonte = pg.font.SysFont("Elephant", 16,True,False)
@@ -49,11 +50,12 @@ contador_pontos = 0
 
 
 #vou criar um loop infinito para manter a janela aberta
-while True:
-    lista_eventos = pg.event.get() #peggo todos os enventos que acontecem na janela
+rodando = True 
+while rodando:
+    lista_eventos = pg.event.get() #pego todos os enventos que acontecem na janela
     for evento in lista_eventos: #percorro os eventos
         if evento.type == pg.QUIT: #verifico se um dos eventos é para SAIR
-            pg.quit() #encerro o jogo
+            rodando = False
 #pegando a lista de teclas pressionadas
     teclas_pressionadas = pg.key.get_pressed()
     if status_jogo == "INICIO":
@@ -89,7 +91,7 @@ while True:
     if hamster.pos_x == 500:
         contador_pontos = contador_pontos +1
         hamster.voltar()
-        if contador_pontos ==3:
+        if contador_pontos ==5:
          status_jogo = "GANHOU"
          
          if status_jogo =="GANHOU":
